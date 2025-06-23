@@ -9,7 +9,7 @@ class ScreenCaptureTool:
 
         self.root = tk.Tk()
         self.root.attributes('-fullscreen', True)
-        self.root.attributes('-alpha', 0.3)  # Transparent window
+        self.root.attributes('-alpha', 0.3)  # Make window semi-transparent
         self.root.configure(bg='black')
         self.root.bind('<Button-1>', self.on_click)
         self.root.bind('<B1-Motion>', self.on_drag)
@@ -21,22 +21,28 @@ class ScreenCaptureTool:
         self.root.mainloop()
 
     def on_click(self, event):
-        self.start_x = self.canvas.canvasx(event.x)
-        self.start_y = self.canvas.canvasy(event.y)
-        self.rect = self.canvas.create_rectangle(self.start_x, self.start_y, self.start_x, self.start_y, outline='red', width=2)
+        self.start_x = self.root.winfo_pointerx()
+        self.start_y = self.root.winfo_pointery()
+        self.rect = self.canvas.create_rectangle(event.x, event.y, event.x, event.y, outline='red', width=2)
 
     def on_drag(self, event):
-        curX, curY = (self.canvas.canvasx(event.x), self.canvas.canvasy(event.y))
-        self.canvas.coords(self.rect, self.start_x, self.start_y, curX, curY)
+        self.canvas.coords(self.rect, self.canvas.canvasx(self.start_x - self.root.winfo_rootx()),
+                                     self.canvas.canvasy(self.start_y - self.root.winfo_rooty()),
+                                     event.x, event.y)
 
     def on_release(self, event):
-        x1 = min(self.start_x, event.x)
-        y1 = min(self.start_y, event.y)
-        x2 = max(self.start_x, event.x)
-        y2 = max(self.start_y, event.y)
+        end_x = self.root.winfo_pointerx()
+        end_y = self.root.winfo_pointery()
 
-        self.root.destroy()
+        self.root.withdraw()  # Hide the tkinter window so it’s not in the screenshot
+        self.root.after(100, lambda: self.take_screenshot(self.start_x, self.start_y, end_x, end_y))
 
-        # Take screenshot of the selected area
-        img = ImageGrab.grab(bbox=(x1, y1, x2, y2))  # (left, top, right, bottom)
-        img.save("screenshot_selected_area.png")
+    def take_screenshot(self, x1, y1, x2, y2):
+        bbox = (min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2))
+        img = ImageGrab.grab(bbox=bbox)
+        img.save("SSArea.png")
+        self.root.quit()
+
+# Run the tool
+if __name__ == '__main__':
+    ScreenCaptureTool()

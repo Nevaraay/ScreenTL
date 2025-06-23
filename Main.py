@@ -1,15 +1,21 @@
 import pytesseract
+import Shot
 from PIL import Image
 from googletrans import Translator
 
-# Load image
-img = Image.open('korean.PNG')
+# Take & Load image
+Shot.ScreenCaptureTool()
+img = Image.open("SSArea.png")
 
 # Use tesseract to do OCR on the image
-text = pytesseract.image_to_string(img, lang='kor')  # 'kor' for Korean
-print(text)
-print('')
+text = pytesseract.image_to_string(img, lang='eng')
+lines = text.split('\n')
+lin = ''
+for l in lines:
+    lin += f'{l} '
+print(lin)
+print('--------------------------------------------')
+  
 translator = Translator()
-
-translated_text = translator.translate(text, src='ko', dest='en').text
+translated_text = translator.translate(lin, src='en', dest='id').text
 print(translated_text)
