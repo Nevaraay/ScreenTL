@@ -42,7 +42,3 @@ class ScreenCaptureTool:
         img = ImageGrab.grab(bbox=bbox)
         img.save("SSArea.png")
         self.root.quit()
-
-# Run the tool
-if __name__ == '__main__':
-    ScreenCaptureTool()
