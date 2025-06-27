@@ -14,8 +14,7 @@ while True:
         # Take & Load image
         Shot.ScreenCaptureTool()
         img = Image.open("SSArea.png")
-        img = ImageOps.expand(img, border=3, fill='black')
-
+        img = ImageOps.expand(img, border=1, fill='black')
         # Enhance Image
         # Enhance contrast
         enhancer_contrast = ImageEnhance.Contrast(img)
@@ -30,16 +29,17 @@ while True:
         img_sharp = enhancer_sharpness.enhance(0.1)  # 1.0 = original, >1 = sharper
         
         # Use tesseract to do OCR on the image
-        text = pytesseract.image_to_string(img_sharp, lang='eng')
-        lines = text.split('\n')
+        text = pytesseract.image_to_string(img_sharp, lang='kor')
+        lines = text.strip().split('\n')
         lin = ''
         for l in lines:
             lin += f'{l} '
         print(lin)
-        print('--------------------------------------------')
+        print('-------------------------------------------------------------------------------------------------------------------------')
         
-        translated_text= GoogleTranslator(source='auto', target='id').translate(lin)
+        translated_text= GoogleTranslator(source='auto', target='en').translate(lin)
         print(translated_text)
+        print('')
         
     else:
         pass
