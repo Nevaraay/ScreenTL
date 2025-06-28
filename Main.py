@@ -1,16 +1,25 @@
 import pytesseract
 import Shot
 import keyboard
+import os
 from PIL import Image, ImageEnhance, ImageOps
-from deep_translator import GoogleTranslator
+from google.cloud import translate_v2 as translate
+from pynput import keyboard
 
-    
-while True:
-    if keyboard.is_pressed('esc'):
-        print("ESC pressed. Exiting...")
-        break
-    
-    elif keyboard.is_pressed('ctrl+.'):
+# Set the path to your service account key
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "imagetranslation-464309-0033b5674b8a.json"
+# Initialize the client
+translate_client = translate.Client()
+
+# Track which keys are currently pressed
+current_keys = set()
+
+def on_press(key):
+    current_keys.add(key)
+
+    if (keyboard.Key.alt_l in current_keys or keyboard.Key.alt_r in current_keys):
+        current_keys.discard(key)
+        
         # Take & Load image
         Shot.ScreenCaptureTool()
         img = Image.open("SSArea.png")
@@ -37,9 +46,19 @@ while True:
         print(lin)
         print('-------------------------------------------------------------------------------------------------------------------------')
         
-        translated_text= GoogleTranslator(source='auto', target='en').translate(lin)
-        print(translated_text)
+        # Translate text
+        translated_text = translate_client.translate(text, target_language="en")
+        print(translated_text["translatedText"])
         print('')
-        
-    else:
-        pass
+            
+def on_release(key):
+    if key in current_keys:
+        current_keys.remove(key)
+
+    if key == keyboard.Key.esc:
+        print("Exiting...")
+        return False  # Stops the listener
+
+# Start listening
+with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+    listener.join()
