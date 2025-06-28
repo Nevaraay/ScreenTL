@@ -31,11 +31,11 @@ class ScreenCaptureTool:
                                      event.x, event.y)
 
     def on_release(self, event):
-        end_x = self.root.winfo_pointerx()
-        end_y = self.root.winfo_pointery()
+        self.end_x = self.root.winfo_pointerx()
+        self.end_y = self.root.winfo_pointery()
 
         self.root.withdraw()  # Hide the tkinter window so it’s not in the screenshot
-        self.root.after(100, lambda: self.take_screenshot(self.start_x, self.start_y, end_x, end_y))
+        self.root.after(100, lambda: self.take_screenshot(self.start_x, self.start_y, self.end_x, self.end_y))
 
     def take_screenshot(self, x1, y1, x2, y2):
         bbox = (min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2))

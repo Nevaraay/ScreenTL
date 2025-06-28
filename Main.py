@@ -2,7 +2,8 @@ import pytesseract
 import Shot
 import keyboard
 import os
-from PIL import Image, ImageEnhance, ImageOps
+import Textout
+from PIL import Image, ImageEnhance, ImageOps, ImageFont
 from google.cloud import translate_v2 as translate
 from pynput import keyboard
 
@@ -17,24 +18,21 @@ current_keys = set()
 def on_press(key):
     current_keys.add(key)
 
-    if (keyboard.Key.alt_l in current_keys or keyboard.Key.alt_r in current_keys):
-        current_keys.discard(key)
-        
+    if (key == keyboard.Key.alt_l  or key == keyboard.Key.alt_r or key == keyboard.Key.alt_gr):    
         # Take & Load image
-        Shot.ScreenCaptureTool()
+        shoot = Shot.ScreenCaptureTool()
+        x1,y1 = shoot.start_x, shoot.start_y
+        x2,y2 = shoot.end_x, shoot.end_y
+        
         img = Image.open("SSArea.png")
         img = ImageOps.expand(img, border=1, fill='black')
         # Enhance Image
         # Enhance contrast
         enhancer_contrast = ImageEnhance.Contrast(img)
         img_contrast = enhancer_contrast.enhance(2.0)  # 1.0 = original, >1 = more contrast
-
-        # Enhance brightness
-        enhancer_brightness = ImageEnhance.Brightness(img_contrast)
-        img_bright = enhancer_brightness.enhance(1.0)  # 1.0 = original, >1 = brighter
-
+        
         # Enhance sharpness
-        enhancer_sharpness = ImageEnhance.Sharpness(img_bright)
+        enhancer_sharpness = ImageEnhance.Sharpness(img_contrast)
         img_sharp = enhancer_sharpness.enhance(0.1)  # 1.0 = original, >1 = sharper
         
         # Use tesseract to do OCR on the image
@@ -48,8 +46,7 @@ def on_press(key):
         
         # Translate text
         translated_text = translate_client.translate(text, target_language="en")
-        print(translated_text["translatedText"])
-        print('')
+        Textout.text_out(x1,y1,x2,y2,translated_text["translatedText"])
             
 def on_release(key):
     if key in current_keys:
