@@ -3,7 +3,7 @@ import Shot
 import keyboard
 import os
 import Textout
-from PIL import Image, ImageEnhance, ImageOps, ImageFont
+from PIL import Image, ImageOps, ImageFilter
 from google.cloud import translate_v2 as translate
 from pynput import keyboard
 
@@ -19,28 +19,22 @@ def on_press(key):
     current_keys.add(key)
 
     if (key == keyboard.Key.alt_l  or key == keyboard.Key.alt_r or key == keyboard.Key.alt_gr):    
-        # Take & Load image
+        # Take image
         shoot = Shot.ScreenCaptureTool()
         x1,y1 = shoot.start_x, shoot.start_y
         x2,y2 = shoot.end_x, shoot.end_y
         
+        # Load & Enhance Image
         img = Image.open("SSArea.png")
         img = ImageOps.expand(img, border=1, fill='black')
-        # Enhance Image
-        # Enhance contrast
-        enhancer_contrast = ImageEnhance.Contrast(img)
-        img_contrast = enhancer_contrast.enhance(2.0)  # 1.0 = original, >1 = more contrast
-        
-        # Enhance sharpness
-        enhancer_sharpness = ImageEnhance.Sharpness(img_contrast)
-        img_sharp = enhancer_sharpness.enhance(0.1)  # 1.0 = original, >1 = sharper
+        img = img.filter(ImageFilter.UnsharpMask(radius=0.75, percent=100, threshold=2))
         
         # Use tesseract to do OCR on the image
-        text = pytesseract.image_to_string(img_sharp, lang='kor')
+        text = pytesseract.image_to_string(img, lang='kor')
         lines = text.strip().split('\n')
         lin = ''
         for l in lines:
-            lin += f'{l} '
+            lin += f'{l}'
         print(lin)
         print('-------------------------------------------------------------------------------------------------------------------------')
         
