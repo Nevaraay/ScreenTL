@@ -1,16 +1,27 @@
 import pytesseract
 import Shot
 import keyboard
-import os
 import Textout
 from PIL import Image, ImageOps, ImageFilter
-from google.cloud import translate_v2 as translate
 from pynput import keyboard
+from deep_translator import GoogleTranslator
+from google.cloud import translate_v3 as translate
+from google.oauth2 import service_account
 
-# Set the path to your service account key
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "imagetranslation-464309-0033b5674b8a.json"
-# Initialize the client
-translate_client = translate.Client()
+SERVICE_ACCOUNT_KEY_PATH = "imagetranslation-464309-0033b5674b8a.json" 
+LOCATION = 'global'
+# Load credentials from the service account JSON file
+credentials = service_account.Credentials.from_service_account_file(
+    SERVICE_ACCOUNT_KEY_PATH
+)
+
+# Get the project ID from the loaded credentials
+project_id = credentials.project_id
+if not project_id:
+    raise ValueError("Project ID not found in service account key file.")
+
+client = translate.TranslationServiceClient(credentials=credentials)
+parent = f"projects/{project_id}/locations/{LOCATION}"
 
 # Track which keys are currently pressed
 current_keys = set()
@@ -30,17 +41,33 @@ def on_press(key):
         img = img.filter(ImageFilter.UnsharpMask(radius=0.75, percent=100, threshold=2))
         
         # Use tesseract to do OCR on the image
-        text = pytesseract.image_to_string(img, lang='kor')
+        text = pytesseract.image_to_string(img, lang='chi_sim')
         lines = text.strip().split('\n')
-        lin = ''
+        linear_text = ''
         for l in lines:
-            lin += f'{l}'
-        print(lin)
+            linear_text += f'{l}'
+        print(linear_text)
         print('-------------------------------------------------------------------------------------------------------------------------')
         
         # Translate text
-        translated_text = translate_client.translate(text, target_language="en")
-        Textout.text_out(x1,y1,x2,y2,translated_text["translatedText"])
+        response = client.translate_text(
+            request={
+                "parent": parent,
+                "contents": [linear_text],
+                "mime_type": "text/plain",
+                "target_language_code": 'en',
+            }
+        )
+        translated_text=''
+        for t in response.translations:
+                translated_text += t.translated_text
+                
+        Textout.text_out(x1,y1,x2,y2,translated_text)
+        print(translated_text)
+        print('-------------------------------------------------------------------------------------------------------------------------')
+        #translated_text= GoogleTranslator(source='auto', target='en').translate(linear_text)
+        #print(translated_text)
+        #print('')
             
 def on_release(key):
     if key in current_keys:
