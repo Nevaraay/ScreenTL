@@ -7,7 +7,7 @@ class ScreenCaptureTool:
         self.start_y = None
         self.rect = None
 
-        self.root = tk.Tk()
+        self.root = tk.Toplevel()
         self.root.attributes('-fullscreen', True)
         self.root.attributes('-alpha', 0.3)  # Make window semi-transparent
         self.root.configure(bg='black')
