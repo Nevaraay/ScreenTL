@@ -1,2 +1,2 @@
 # ScreenTL
-Free Screen Translatator for Desktop
+Free Screen Translator for Desktop
