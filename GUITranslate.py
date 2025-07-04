@@ -143,12 +143,9 @@ def target_list():
 
 def translating():
     text_to_translate = source_text.get("1.0", tk.END)
-    d_lang = detect(text_to_translate)
-    language_name = get_language_name(d_lang)
-    detect_lang.config(text = f"Source Language : {language_name}")
-    
     nmt = radio_state.get()
     if nmt == 1:
+        d_lang = detect(text_to_translate)
         translated_text= GoogleTranslator(source='auto', target=t_lang).translate(text_to_translate)
     elif nmt == 2:
         response = client.translate_text(
@@ -162,11 +159,13 @@ def translating():
         translated_text=''
         for t in response.translations:
             translated_text += t.translated_text
-            #detected_language = t.detected_language_code
+            d_lang = t.detected_language_code
             #print(detected_language)
     target_text.delete("1.0", tk.END)
     target_text.insert(tk.END, translated_text)
     #target_text.insert(tk.END, translated_text, "styled")
+    language_name = get_language_name(d_lang[:2])
+    detect_lang.config(text = f"Source Language : {language_name}")
   
 roots = tk.Tk()
 roots.title("Nevar Translator")

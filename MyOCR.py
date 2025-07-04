@@ -1,4 +1,5 @@
 import pytesseract
+import re
 from PIL import Image, ImageOps, ImageFilter
 
 def get_ocr(lang):
@@ -9,9 +10,7 @@ def get_ocr(lang):
     
     # Use tesseract to do OCR on the image
     text = pytesseract.image_to_string(img, lang=lang)
-    lines = text.strip().split('\n')
-    linear_text = ''
-    for l in lines:
-        linear_text += f'{l}'
+    text = text.strip()
+    linear_text = re.sub(r'\s+',' ', text) #replace any whitespace chars (space,tab,newline) to a single space
     
     return linear_text
