@@ -7,6 +7,7 @@ from langdetect import detect
 from deep_translator import GoogleTranslator
 from google.cloud import translate_v3 as translate
 from google.oauth2 import service_account
+from google.cloud import vision
 
 # Look for .json files in the current directory
 json_files = [f for f in os.listdir(".") if f.endswith(".json")]
@@ -59,6 +60,7 @@ t_lang = "id"
 ss_mode = False
 ex_mode = False
 
+
 def get_language_name(lang_code):
     try:
         language = pycountry.languages.get(alpha_2=lang_code)
@@ -66,21 +68,36 @@ def get_language_name(lang_code):
     except:
         return "Unknown"
 
+def ocr_lang():
+    ocr = ocr_state.get()
+    if ocr == 1:
+        sl_button.place(x=140, y = 25)
+        nmt_1.config(text = "Tesseract ====>")
+        nmt_2.config(text = "Google Vision")
+    elif ocr == 2:
+        sl_button.place_forget()
+        nmt_1.config(text = "Tesseract")
+        nmt_2.config(text = "Google Vision (Auto-detect)")
+        
+
 def ss_toggle():
     ss_mode = ss_var.get()
     # Bind to the left Alt key
     if ss_mode is True:
         # Make the window always stay on top
         #roots.attributes('-topmost', True)
-        ss_label.place(relx=1.0, rely=0.0, anchor='ne')
-        ocr_label.place(x=10, y = 45)
-        sl_button.place(x=140, y = 45)
+        #ss_label.place(relx=1.0, rely=0.0, anchor='ne')
+        ss_label.place(x=80, y = 2)
+        #ocr_label.place(x=10, y = 25)
+        nmt_1.place(x=10, y = 25)
+        nmt_2.place(x=10, y = 55)
         roots.bind("<Alt_L>", take_screen)
     else:
         roots.geometry(f"300x600")
         ss_label.place_forget()
-        ocr_label.place_forget()
-        sl_button.place_forget()
+        #ocr_label.place_forget()
+        nmt_1.place_forget()
+        nmt_2.place_forget()
         roots.unbind("<Alt_L>")
     #print(ss_mode)
     
@@ -90,12 +107,12 @@ def expand():
         roots.geometry(f"600x600+{roots.winfo_screenwidth()-630}+{80}")
         source_text.config(width=73)
         target_text.config(width=73)
-        ss_label.config(text="While this window pop up, press L_ALT to capture screen")
+        #ss_label.config(text="While this window pop up, press L_ALT to capture screen")
     else:
         roots.geometry(f"300x600+{roots.winfo_screenwidth()-330}+{80}")
         source_text.config(width=35)
         target_text.config(width=35)
-        ss_label.config(text="While this window pop up,\npress L_ALT to capture screen")
+        #ss_label.config(text="While this window pop up,\npress L_ALT to capture screen")
 
 def take_screen(event):
     roots.withdraw()
@@ -143,7 +160,7 @@ def target_list():
 
 def translating():
     text_to_translate = source_text.get("1.0", tk.END)
-    nmt = radio_state.get()
+    nmt = nmt_state.get()
     if nmt == 1:
         d_lang = detect(text_to_translate)
         translated_text= GoogleTranslator(source='auto', target=t_lang).translate(text_to_translate)
@@ -165,7 +182,7 @@ def translating():
     target_text.insert(tk.END, translated_text)
     #target_text.insert(tk.END, translated_text, "styled")
     language_name = get_language_name(d_lang[:2])
-    detect_lang.config(text = f"Source Language : {language_name}")
+    detect_lang.config(text = f"Source Language :       {language_name}")
   
 roots = tk.Tk()
 roots.title("Nevar Translator")
@@ -174,7 +191,7 @@ roots.resizable(False, False)
   
 
 ss_var = tk.BooleanVar()
-tk.Checkbutton(text="Screenshot Mode",
+tk.Checkbutton(text="OCR",
                font=('Times',10),
                variable= ss_var, 
                command= ss_toggle
@@ -187,16 +204,16 @@ tk.Checkbutton(text="Expand",
                command= expand
                ).place(relx=0.5,x=-100, y = 315, anchor='center')
 
-ss_label = tk.Label(text = "While this window pop up,\npress L_ALT to capture screen",
+ss_label = tk.Label(text = "(While this window pop up, press L_ALT)",
                  font= ('Times', 9, 'italic'))
  
-ocr_label = tk.Label(text = f"OCR Source :", font=('Times',12))
+ocr_label = tk.Label(text =  "Tesseract Source :", font=('Times',12))
 
 sl_button = tk.Button(text='English', font=('Times',11,'bold'), width=15, command=source_list)
 
 
 
-detect_lang = tk.Label(text = "Source Language : Auto", font=('Times',12))
+detect_lang = tk.Label(text = "Source Language :       Auto-detect", font=('Times',12))
 detect_lang.place(x=10, y = 95)
 
 
@@ -221,9 +238,16 @@ target_text.place(relx=0.5,y=455,anchor='center')
 #target_text.tag_configure("styled", font=("Helvetica", 10))
 
 tk.Label(text = "Neural Machine Translation (NMT) :", font=('Times',10)).place(x=10, y = 545)
-radio_state = tk.IntVar()
-radio_state.set(1)
-nmt_1 = tk.Radiobutton(text="Deep Translation\n(max = 5k chars)",font=('Times',10), value=1, variable=radio_state).place(x=10, y = 560)
-nmt_2 = tk.Radiobutton(text="Cloud Translation\n(recommended ≤ 10k)",font=('Times',10), value=2, variable=radio_state).place(x=150, y = 560)
+nmt_state = tk.IntVar()
+nmt_state.set(1)
+nmt_1 = tk.Radiobutton(text="Deep Translation\n(max = 5k chars)",font=('Times',10), value=1, variable=nmt_state
+                       ).place(x=10, y = 560)
+nmt_2 = tk.Radiobutton(text="Cloud Translation\n(recommended ≤ 10k)",font=('Times',10), value=2, variable=nmt_state
+                       ).place(x=150, y = 560)
+
+ocr_state = tk.IntVar()
+nmt_1 = tk.Radiobutton(text = "Tesseract",font=('Times',12), value=1, variable=ocr_state, command= ocr_lang)
+nmt_2 = tk.Radiobutton(text = "Google Vision",font=('Times',12), value=2, variable=ocr_state, command=ocr_lang)
+
 
 roots.mainloop()
