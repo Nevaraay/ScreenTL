@@ -2,11 +2,11 @@ import tkinter as tk
 from PIL import ImageGrab
 
 class ScreenCaptureTool:
-    def __init__(self):
+    def __init__(self,img_name):
         self.start_x = None
         self.start_y = None
         self.rect = None
-
+        self.img_name = img_name
         self.root = tk.Toplevel()
         self.root.attributes('-fullscreen', True)
         self.root.attributes('-alpha', 0.3)  # Make window semi-transparent
@@ -30,7 +30,7 @@ class ScreenCaptureTool:
                                      self.canvas.canvasy(self.start_y - self.root.winfo_rooty()),
                                      event.x, event.y)
 
-    def on_release(self, event):
+    def on_release(self,event):
         self.end_x = self.root.winfo_pointerx()
         self.end_y = self.root.winfo_pointery()
 
@@ -40,5 +40,11 @@ class ScreenCaptureTool:
     def take_screenshot(self, x1, y1, x2, y2):
         bbox = (min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2))
         img = ImageGrab.grab(bbox=bbox)
-        img.save("SSArea.png")
+        # Check size
+        w, h = img.size
+        if w >= 1 and h >= 1:
+            img.save(self.img_name)
+        else:
+            pass
         self.root.quit()
+    

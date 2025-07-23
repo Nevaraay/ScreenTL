@@ -1,5 +1,5 @@
 import pytesseract
-import Shot
+import cshot
 import keyboard
 import Textout
 from PIL import Image, ImageOps, ImageFilter
@@ -31,7 +31,7 @@ def on_press(key):
 
     if (key == keyboard.Key.alt_l  or key == keyboard.Key.alt_r or key == keyboard.Key.alt_gr):    
         # Take image
-        shoot = Shot.ScreenCaptureTool()
+        shoot = cshot.ScreenCaptureTool()
         x1,y1 = shoot.start_x, shoot.start_y
         x2,y2 = shoot.end_x, shoot.end_y
         

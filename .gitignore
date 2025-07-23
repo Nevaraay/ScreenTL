@@ -1,8 +1,8 @@
 __pycache__/
-SSArea.png
-notes.txt
-playground.ipynb
-enhanced_img.png
+*.db
+*.png
+*.txt
+*.ipynb
 *.json
 nano.py
 tkinter playg.py
