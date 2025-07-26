@@ -2,7 +2,6 @@ from paddleocr import PaddleOCR
 import os
 import re
 from google.cloud import vision
-from PIL import Image, ImageOps, ImageFilter
 
 # Look for .json files in the current directory
 json_files = [f for f in os.listdir(".") if f.endswith(".json")]
