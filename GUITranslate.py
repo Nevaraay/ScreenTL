@@ -112,6 +112,7 @@ def take_screen(event):
     elif ocr == 2:
         try:
             get_text = my_ocr.visi_ocr(img_name)
+            history.insert_bar(val_1=1)
         except Exception as e:
             source_text.config(fg="red")
             source_text.insert(tk.END, e)
@@ -208,6 +209,7 @@ def translating():
                 source_language = get_language_name(d_lang[:2])
                 detect_lang.config(text = f"Source : {source_language}")
                 history.insert_row([source_language,target_language,text_to_translate,translated_text])
+                history.insert_bar(val_2=1,val_3=count)
                 
             except Exception as e:
                 target_text.config(fg="red")
@@ -263,11 +265,11 @@ detect_lang.place(x=10, y = 95)
 def text_count(event):
     nmt = nmt_state.get()
     source_text.edit_modified(False)  # Reset the modified flag
-    content = source_text.get("1.0", "end-1c")  # Get all text, excluding trailing newline
+    content = len(source_text.get("1.0", "end-1c"))  # Get all text, excluding trailing newline
     if nmt == 1:
-        char_count.set(f"{len(content)}/5000")
+        char_count.set(f"{content}/5000")
     elif nmt == 2:
-        char_count.set(f"{len(content)}/10000")
+        char_count.set(f"{content}/10000")
         
 
 # StringVar to update label dynamically
