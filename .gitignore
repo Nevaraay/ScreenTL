@@ -1,7 +1,6 @@
 __pycache__/
 *.db
 *.png
-*.txt
 *.ipynb
 *.json
 nano.py
