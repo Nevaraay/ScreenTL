@@ -3,7 +3,7 @@ from datetime import datetime
 
 class TranslationHistory:
     def __init__(self):
-        # === Step 1: Connect to SQLite and create table ===
+        # Connect to SQLite and create table
         self.conn = sqlite3.connect('my_database.db')
         self.cursor = self.conn.cursor()
         self.cursor.execute('''

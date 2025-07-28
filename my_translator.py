@@ -21,5 +21,6 @@ project_id = credentials.project_id
 if not project_id:
     raise ValueError("Project ID not found in service account key file.")
 
+# Create client & parent for translate request 
 client = translate.TranslationServiceClient(credentials=credentials)
 parent = f"projects/{project_id}/locations/{LOCATION}"
