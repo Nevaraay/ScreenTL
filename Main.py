@@ -134,8 +134,8 @@ def take_screen(event):
 # Menu for choosing paddle OCR source Language    
 def source_list():
     s_win = tk.Toplevel()
-    s_win.geometry(f'100x100+{str(int(roots.winfo_x())+150)}+{str(int(roots.winfo_y())+100)}')
-    s_lb = tk.Listbox(s_win,height=4)
+    s_win.geometry(f'100x150+{str(int(roots.winfo_x())+150)}+{str(int(roots.winfo_y())+100)}')
+    s_lb = tk.Listbox(s_win,height=8)
     for item in lang_list:
         s_lb.insert(tk.END, item)
     s_lb.pack()
@@ -153,8 +153,8 @@ def source_list():
 # Menu for choosing target language
 def target_list():
     t_win = tk.Toplevel()
-    t_win.geometry(f'100x100+{str(int(roots.winfo_x())+150)}+{str(int(roots.winfo_y())+400)}')
-    t_lb = tk.Listbox(t_win,height=4)
+    t_win.geometry(f'100x150+{str(int(roots.winfo_x())+150)}+{str(int(roots.winfo_y())+400)}')
+    t_lb = tk.Listbox(t_win,height=8)
     for item in lang_list:
         t_lb.insert(tk.END, item)
     t_lb.pack()

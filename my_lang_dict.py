@@ -1,23 +1,102 @@
-lang_list = ["English","Simplified Chinese","Traditional Chinese","Korean",
-                 "Japanese","Indonesian","Italian"]
+lang_list = [
+    "Chinese Simplified", "English", "French", "German", "Japanese", "Korean", "Chinese Traditional",
+    "Afrikaans", "Italian", "Spanish", "Bosnian", "Portuguese", "Czech", "Welsh", "Danish",
+    "Estonian", "Irish", "Croatian", "Uzbek", "Russian", "Ukrainian", "Hungarian",
+    "Serbian (latin)", "Indonesian", "Occitan", "Icelandic", "Lithuanian", "Maori",
+    "Malay", "Dutch", "Norwegian", "Polish", "Slovak", "Slovenian", "Albanian", "Swedish",
+    "Swahili", "Tagalog", "Turkish", "Latin", "Belarusian"
+]
+
 lang_list = sorted(lang_list)
 
 source_lang_codes = {
+    "Chinese Simplified": "ch",
     "English": "en",
-    "Simplified Chinese": "ch",
-    "Traditional Chinese": "chinese_cht", 
-    "Korean": "korean",
+    "French": "fr",
+    "German": "de",
     "Japanese": "japan",
+    "Korean": "korean",
+    "Chinese Traditional": "chinese_cht",
+    "Afrikaans": "af",
+    "Italian": "it",
+    "Spanish": "es",
+    "Bosnian": "bs",
+    "Portuguese": "pt",
+    "Czech": "cs",
+    "Welsh": "cy",
+    "Danish": "da",
+    "Estonian": "et",
+    "Irish": "ga",
+    "Croatian": "hr",
+    "Uzbek": "uz",
+    "Russian": "ru",
+    "Ukrainian": "uk",
+    "Hungarian": "hu",
+    "Serbian (latin)": "rs_latin",
     "Indonesian": "id",
-    "Italian": "it"
+    "Occitan": "oc",
+    "Icelandic": "is",
+    "Lithuanian": "lt",
+    "Maori": "mi",
+    "Malay": "ms",
+    "Dutch": "nl",
+    "Norwegian": "no",
+    "Polish": "pl",
+    "Slovak": "sk",
+    "Slovenian": "sl",
+    "Albanian": "sq",
+    "Swedish": "sv",
+    "Swahili": "sw",
+    "Tagalog": "tl",
+    "Turkish": "tr",
+    "Latin": "la",
+    "Belarusian": "be"
 }
 
 target_lang_codes = {
+    "Chinese Simplified ": "zh-CN",
     "English": "en",
-    "Simplified Chinese": "zh-CN",
-    "Traditional Chinese": "zh-TW",
-    "Korean": "ko",
+    "French": "fr",
+    "German": "de",
     "Japanese": "ja",
+    "Korean": "ko",
+    "Chinese Traditional": "zh-TW",
+    "Afrikaans": "af",
+    "Italian": "it",
+    "Spanish": "es",
+    "Bosnian": "bs",
+    "Portuguese": "pt",
+    "Czech": "cs",
+    "Welsh": "cy",
+    "Danish": "da",
+    "Estonian": "et",
+    "Irish": "ga",
+    "Croatian": "hr",
+    "Uzbek": "uz",
+    "Russian": "ru",
+    "Ukrainian": "uk",
+    "Hungarian": "hu",
+    "Serbian (latin)": "sr",  # Note: Google Translate does not differentiate Latin/ Cyrillic in the code; it's just "sr"
     "Indonesian": "id",
-    "Italian": "it"
+    "Occitan": "oc",
+    "Icelandic": "is",
+    "Lithuanian": "lt",
+    "Maori": "mi",
+    "Malay": "ms",
+    "Dutch": "nl",
+    "Norwegian": "no",
+    "Polish": "pl",
+    "Slovak": "sk",
+    "Slovenian": "sl",
+    "Albanian": "sq",
+    "Swedish": "sv",
+    "Swahili": "sw",
+    "Tagalog": "tl",
+    "Turkish": "tr",
+    "Latin": "la",
+    "Belarusian": "be"
 }
+
+if __name__=="__main__":
+    print(lang_list)
+    print(len(lang_list))
