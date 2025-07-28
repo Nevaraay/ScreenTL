@@ -30,7 +30,7 @@ Screen Translator (ScreenTL) is a desktop application that captures a selected s
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/ScreenTL.git
+   git clone https://github.com/Nevaraay/ScreenTL.git
    cd ScreenTL
    ```
 
