@@ -54,7 +54,7 @@ source_lang_codes = {
 }
 
 target_lang_codes = {
-    "Chinese Simplified ": "zh-CN",
+    "Chinese Simplified": "zh-CN",
     "English": "en",
     "French": "fr",
     "German": "de",

@@ -7,7 +7,11 @@ class ScreenCaptureTool:
         self.start_y = None
         self.rect = None
         self.img_name = img_name
-        self.root = tk.Toplevel() # using secondary window to prevent clashing with main translator window 
+        if not tk._default_root:
+            # No root exists — create one
+            self.root = tk.Tk()
+        else:
+            self.root = tk.Toplevel() # using secondary window to prevent clashing with main translator window 
         self.root.attributes('-fullscreen', True)
         self.root.attributes('-alpha', 0.3)  # Make window semi-transparent
         self.root.configure(bg='black')

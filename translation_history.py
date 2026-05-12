@@ -44,7 +44,7 @@ class TranslationHistory:
         if count == 0:
             self.cursor.execute("INSERT INTO usage VALUES (?, ?, ?, ?, ?, ?)", (year,month,day, val_1, val_2, val_3)) 
             self.conn.commit()
-            print("Inserted row this for month.")
+            #print("Inserted row for this month.")
         else:
             # Check if row for today already exists
             self.cursor.execute("SELECT col1,col2,col3 FROM usage WHERE (day, month, year) = (?, ?, ?)", (day, month, year))
